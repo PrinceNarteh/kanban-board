@@ -11,7 +11,13 @@ interface ColumnItemProps {
 
 const ColumnItem: React.FC<ColumnItemProps> = ({ column, deleteColumn }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: column.id });
+    useSortable({
+      id: column.id,
+      data: {
+        type: "Column",
+        column,
+      },
+    });
 
   const styles = {
     transition,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Column, Id } from "../types";
 import ColumnItem from "./ColumnItem";
 import {
@@ -12,8 +12,15 @@ interface ColumnListProps {
 }
 
 const ColumnList: React.FC<ColumnListProps> = ({ columns, deleteColumn }) => {
+  const columnsIds = useMemo(
+    () => columns.map((column) => column.id),
+    [columns]
+  );
   return (
-    <SortableContext items={columns} strategy={horizontalListSortingStrategy}>
+    <SortableContext
+      items={columnsIds}
+      strategy={horizontalListSortingStrategy}
+    >
       <div className="flex gap-4">
         {columns.map((column) => (
           <ColumnItem
