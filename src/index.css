@@ -7,3 +7,9 @@ body,
 #root {
   @apply bg-black text-white box-border;
 }
+
+@layer utilities {
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+}

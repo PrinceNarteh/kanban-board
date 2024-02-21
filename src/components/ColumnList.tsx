@@ -1,16 +1,21 @@
 import React from "react";
-import { Column } from "../types";
+import { Column, Id } from "../types";
 import ColumnItem from "./ColumnItem";
 
 interface ColumnListProps {
   columns: Column[];
+  deleteColumn: (id: Id) => void;
 }
 
-const ColumnList: React.FC<ColumnListProps> = ({ columns }) => {
+const ColumnList: React.FC<ColumnListProps> = ({ columns, deleteColumn }) => {
   return (
     <div className="flex gap-4">
       {columns.map((column) => (
-        <ColumnItem key={column.id} column={column} />
+        <ColumnItem
+          key={column.id}
+          column={column}
+          deleteColumn={deleteColumn}
+        />
       ))}
     </div>
   );
