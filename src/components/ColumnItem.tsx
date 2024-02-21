@@ -1,6 +1,8 @@
 import React from "react";
 import { Column, Id } from "../types";
 import { TrashIcon } from "../icons";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface ColumnItemProps {
   column: Column;
@@ -8,9 +10,25 @@ interface ColumnItemProps {
 }
 
 const ColumnItem: React.FC<ColumnItemProps> = ({ column, deleteColumn }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: column.id });
+
+  const styles = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
+
   return (
-    <div className="bg-secondary w-80 h-[500px] max-h-[500px] rounded-md flex flex-col">
-      <div className="bg-primary h-14 rounded-md cursor-grab p-3 font-bold border-secondary border-4 flex items-center justify-between">
+    <div
+      ref={setNodeRef}
+      style={styles}
+      className="bg-secondary w-80 h-[500px] max-h-[500px] rounded-md flex flex-col"
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        className="bg-primary h-14 rounded-md cursor-grab p-3 font-bold border-secondary border-4 flex items-center justify-between"
+      >
         <div className="flex gap-2">
           <div className="flex-center bg-secondary px-2 py-1 text-sm rounded-full">
             0
