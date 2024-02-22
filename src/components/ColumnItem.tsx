@@ -11,7 +11,7 @@ interface ColumnItemProps {
 }
 
 const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
-  const { updateColumnTitle, deleteColumn, tasks } = useAppState();
+  const { updateColumnTitle, deleteColumn, tasks, addTask } = useAppState();
   const [editMode, setEditMode] = useState(false);
   const {
     attributes,
@@ -85,11 +85,11 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
         {tasks
           .filter((task) => task.columnId === column.id)
           .map((task) => (
-            <TaskItem key={task.id} task={task} deleteTask={deleteTask} />
+            <TaskItem key={task.id} task={task} />
           ))}
       </div>
       <button
-        onClick={() => createTask(column.id)}
+        onClick={() => addTask(column.id)}
         className="flex-center w-full hover:bg-primary p-2 border-secondary border-4 rounded-md gap-2 hover:text-teal-500 duration-300"
       >
         <PlusIcon />
