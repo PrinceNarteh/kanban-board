@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Column, Id } from "../types";
 import { TrashIcon } from "../icons";
 import { useSortable } from "@dnd-kit/sortable";
@@ -7,9 +7,15 @@ import { CSS } from "@dnd-kit/utilities";
 interface ColumnItemProps {
   column: Column;
   deleteColumn: (id: Id) => void;
+  updateColumnTitle: (id: Id, title: string) => void;
 }
 
-const ColumnItem: React.FC<ColumnItemProps> = ({ column, deleteColumn }) => {
+const ColumnItem: React.FC<ColumnItemProps> = ({
+  column,
+  deleteColumn,
+  updateColumnTitle,
+}) => {
+  const [editMode, setEditMode] = useState(false);
   const {
     attributes,
     listeners,
@@ -23,6 +29,7 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column, deleteColumn }) => {
       type: "Column",
       column,
     },
+    disabled: editMode,
   });
 
   const styles = {
@@ -49,13 +56,28 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column, deleteColumn }) => {
       <div
         {...attributes}
         {...listeners}
+        onClick={() => setEditMode(true)}
         className="bg-primary h-14 rounded-md cursor-grab p-3 font-bold border-secondary border-4 flex items-center justify-between"
       >
         <div className="flex gap-2">
           <div className="flex-center bg-secondary px-2 py-1 text-sm rounded-full">
             0
           </div>
-          {column.title}
+          {editMode ? (
+            <input
+              autoFocus
+              onBlur={() => setEditMode(false)}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter") return;
+                setEditMode(false);
+              }}
+              value={column.title}
+              onChange={(e) => updateColumnTitle(column.id, e.target.value)}
+              className="bg-primary border rounded outline-none px-2 focus:border-teal-500"
+            />
+          ) : (
+            <span>{column.title}</span>
+          )}
         </div>
         <TrashIcon
           onClick={() => deleteColumn(column.id)}

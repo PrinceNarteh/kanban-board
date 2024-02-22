@@ -9,9 +9,14 @@ import {
 interface ColumnListProps {
   columns: Column[];
   deleteColumn: (id: Id) => void;
+  updateColumnTitle: (id: Id, title: string) => void;
 }
 
-const ColumnList: React.FC<ColumnListProps> = ({ columns, deleteColumn }) => {
+const ColumnList: React.FC<ColumnListProps> = ({
+  columns,
+  deleteColumn,
+  updateColumnTitle,
+}) => {
   const columnsIds = useMemo(
     () => columns.map((column) => column.id),
     [columns]
@@ -27,6 +32,7 @@ const ColumnList: React.FC<ColumnListProps> = ({ columns, deleteColumn }) => {
             key={column.id}
             column={column}
             deleteColumn={deleteColumn}
+            updateColumnTitle={updateColumnTitle}
           />
         ))}
       </div>

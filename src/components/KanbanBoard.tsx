@@ -37,6 +37,14 @@ const KanbanBoard = () => {
     setColumns(newColumns);
   };
 
+  const updateColumnTitle = (id: Id, title: string) => {
+    const newColumns = columns.map((col) => {
+      if (col.id !== id) return col;
+      return { ...col, title };
+    });
+    setColumns(newColumns);
+  };
+
   const handleDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.column);
@@ -76,12 +84,20 @@ const KanbanBoard = () => {
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
-          <ColumnList columns={columns} deleteColumn={deleteColumn} />
+          <ColumnList
+            columns={columns}
+            deleteColumn={deleteColumn}
+            updateColumnTitle={updateColumnTitle}
+          />
           <AddColumnBtn onClick={addNewColumn} />
           {createPortal(
             <DragOverlay>
               {activeColumn ? (
-                <ColumnItem column={activeColumn} deleteColumn={deleteColumn} />
+                <ColumnItem
+                  column={activeColumn}
+                  deleteColumn={deleteColumn}
+                  updateColumnTitle={updateColumnTitle}
+                />
               ) : null}
             </DragOverlay>,
             document.body
