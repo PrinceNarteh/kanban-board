@@ -1,26 +1,13 @@
-import React, { useMemo } from "react";
-import { Column, Id, Task } from "../types";
-import ColumnItem from "./ColumnItem";
 import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { useMemo } from "react";
+import { useAppState } from "../hooks";
+import ColumnItem from "./ColumnItem";
 
-interface ColumnListProps {
-  tasks: Task[];
-  columns: Column[];
-  createTask: (columnId: Id) => void;
-  deleteColumn: (id: Id) => void;
-  updateColumnTitle: (id: Id, title: string) => void;
-}
-
-const ColumnList: React.FC<ColumnListProps> = ({
-  tasks,
-  columns,
-  deleteColumn,
-  updateColumnTitle,
-  createTask,
-}) => {
+const ColumnList = () => {
+  const { columns } = useAppState();
   const columnsIds = useMemo(
     () => columns.map((column) => column.id),
     [columns]
@@ -32,14 +19,7 @@ const ColumnList: React.FC<ColumnListProps> = ({
     >
       <div className="flex gap-4">
         {columns.map((column) => (
-          <ColumnItem
-            key={column.id}
-            column={column}
-            tasks={tasks.filter((task) => task.columnId === column.id)}
-            createTask={createTask}
-            deleteColumn={deleteColumn}
-            updateColumnTitle={updateColumnTitle}
-          />
+          <ColumnItem key={column.id} column={column} />
         ))}
       </div>
     </SortableContext>

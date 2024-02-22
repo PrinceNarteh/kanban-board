@@ -18,33 +18,12 @@ import AddColumnBtn from "./AddColumnBtn";
 import ColumnList from "./ColumnList";
 import ColumnItem from "./ColumnItem";
 import { createPortal } from "react-dom";
+import { useAppState } from "../hooks";
 
 const KanbanBoard = () => {
-  const [columns, setColumns] = useState<Column[]>([]);
+  const { columns } = useAppState();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
-
-  const addNewColumn = () => {
-    const newColumn: Column = {
-      id: generateId(),
-      title: `Column-${columns.length + 1}`,
-    };
-
-    setColumns([...columns, newColumn]);
-  };
-
-  const deleteColumn = (id: Id) => {
-    const newColumns = columns.filter((column) => column.id !== id);
-    setColumns(newColumns);
-  };
-
-  const updateColumnTitle = (id: Id, title: string) => {
-    const newColumns = columns.map((col) => {
-      if (col.id !== id) return col;
-      return { ...col, title };
-    });
-    setColumns(newColumns);
-  };
 
   const createTask = (columnId: Id) => {
     const newTask: Task = {

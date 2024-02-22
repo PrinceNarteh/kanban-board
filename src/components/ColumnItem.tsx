@@ -1,27 +1,17 @@
-import React, { useState } from "react";
-import { Column, Id, Task } from "../types";
-import { PlusIcon, TrashIcon } from "../icons";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import React, { useState } from "react";
+import { PlusIcon, TrashIcon } from "../icons";
+import { Column } from "../types";
 import TaskItem from "./TaskItem";
+import { useAppState } from "../hooks";
 
 interface ColumnItemProps {
-  tasks: Task[];
   column: Column;
-  createTask: (columnId: Id) => void;
-  deleteColumn: (id: Id) => void;
-  updateColumnTitle: (id: Id, title: string) => void;
-  deleteTask: (id: Id) => void;
 }
 
-const ColumnItem: React.FC<ColumnItemProps> = ({
-  tasks,
-  column,
-  deleteColumn,
-  updateColumnTitle,
-  createTask,
-  deleteTask,
-}) => {
+const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
+  const { updateColumnTitle, deleteColumn, tasks } = useAppState();
   const [editMode, setEditMode] = useState(false);
   const {
     attributes,
@@ -92,9 +82,11 @@ const ColumnItem: React.FC<ColumnItemProps> = ({
         />
       </div>
       <div className="flex flex-grow flex-col overflow-x-hidden overflow-y-auto">
-        {tasks.map((task) => (
-          <TaskItem key={task.id} task={task} deleteTask={deleteTask} />
-        ))}
+        {tasks
+          .filter((task) => task.columnId === column.id)
+          .map((task) => (
+            <TaskItem key={task.id} task={task} deleteTask={deleteTask} />
+          ))}
       </div>
       <button
         onClick={() => createTask(column.id)}
