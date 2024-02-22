@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Column, Id } from "../types";
+import { Column, Id, Task } from "../types";
 import ColumnItem from "./ColumnItem";
 import {
   SortableContext,
@@ -7,15 +7,19 @@ import {
 } from "@dnd-kit/sortable";
 
 interface ColumnListProps {
+  tasks: Task[];
   columns: Column[];
+  createTask: (columnId: Id) => void;
   deleteColumn: (id: Id) => void;
   updateColumnTitle: (id: Id, title: string) => void;
 }
 
 const ColumnList: React.FC<ColumnListProps> = ({
+  tasks,
   columns,
   deleteColumn,
   updateColumnTitle,
+  createTask,
 }) => {
   const columnsIds = useMemo(
     () => columns.map((column) => column.id),
@@ -31,6 +35,8 @@ const ColumnList: React.FC<ColumnListProps> = ({
           <ColumnItem
             key={column.id}
             column={column}
+            tasks={tasks.filter((task) => task.columnId === column.id)}
+            createTask={createTask}
             deleteColumn={deleteColumn}
             updateColumnTitle={updateColumnTitle}
           />

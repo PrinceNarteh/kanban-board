@@ -1,19 +1,23 @@
 import React, { useState } from "react";
-import { Column, Id } from "../types";
-import { TrashIcon } from "../icons";
+import { Column, Id, Task } from "../types";
+import { PlusIcon, TrashIcon } from "../icons";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 interface ColumnItemProps {
+  tasks: Task[];
   column: Column;
+  createTask: (columnId: Id) => void;
   deleteColumn: (id: Id) => void;
   updateColumnTitle: (id: Id, title: string) => void;
 }
 
 const ColumnItem: React.FC<ColumnItemProps> = ({
+  tasks,
   column,
   deleteColumn,
   updateColumnTitle,
+  createTask,
 }) => {
   const [editMode, setEditMode] = useState(false);
   const {
@@ -84,8 +88,18 @@ const ColumnItem: React.FC<ColumnItemProps> = ({
           className="stroke-gray-500 hover:stroke-white hover:bg-secondary rounded px-1 py-2 duration-300"
         />
       </div>
-      <div className="flex-grow">Content</div>
-      <div>Footer</div>
+      <div className="flex-grow">
+        {tasks.map((task) => (
+          <p>{task.content}</p>
+        ))}
+      </div>
+      <button
+        onClick={() => createTask(column.id)}
+        className="flex-center w-full hover:bg-primary p-2 border-secondary border-4 rounded-md gap-2 hover:text-teal-500 duration-300"
+      >
+        <PlusIcon />
+        <span>Add Task</span>
+      </button>
     </div>
   );
 };

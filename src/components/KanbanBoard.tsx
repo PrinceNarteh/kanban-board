@@ -12,7 +12,7 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { Column, Id } from "../types";
+import { Column, Id, Task } from "../types";
 import { generateId, getPosition } from "../utils";
 import AddColumnBtn from "./AddColumnBtn";
 import ColumnList from "./ColumnList";
@@ -21,6 +21,7 @@ import { createPortal } from "react-dom";
 
 const KanbanBoard = () => {
   const [columns, setColumns] = useState<Column[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
   const addNewColumn = () => {
@@ -43,6 +44,18 @@ const KanbanBoard = () => {
       return { ...col, title };
     });
     setColumns(newColumns);
+  };
+
+  const createTask = (columnId: Id) => {
+    const newTask: Task = {
+      columnId,
+      id: generateId(),
+      content: `Task ${
+        tasks.filter((task) => task.columnId === columnId).length + 1
+      }`,
+    };
+
+    setTasks([...tasks, newTask]);
   };
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -85,15 +98,21 @@ const KanbanBoard = () => {
           onDragEnd={handleDragEnd}
         >
           <ColumnList
+            createTask={createTask}
             columns={columns}
             deleteColumn={deleteColumn}
             updateColumnTitle={updateColumnTitle}
+            tasks={tasks}
           />
           <AddColumnBtn onClick={addNewColumn} />
           {createPortal(
             <DragOverlay>
               {activeColumn ? (
                 <ColumnItem
+                  tasks={tasks.filter(
+                    (task) => task.columnId === activeColumn.id
+                  )}
+                  createTask={createTask}
                   column={activeColumn}
                   deleteColumn={deleteColumn}
                   updateColumnTitle={updateColumnTitle}
