@@ -3,6 +3,7 @@ import { Column, Id, Task } from "../types";
 import { PlusIcon, TrashIcon } from "../icons";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import TaskItem from "./TaskItem";
 
 interface ColumnItemProps {
   tasks: Task[];
@@ -10,6 +11,7 @@ interface ColumnItemProps {
   createTask: (columnId: Id) => void;
   deleteColumn: (id: Id) => void;
   updateColumnTitle: (id: Id, title: string) => void;
+  deleteTask: (id: Id) => void;
 }
 
 const ColumnItem: React.FC<ColumnItemProps> = ({
@@ -18,6 +20,7 @@ const ColumnItem: React.FC<ColumnItemProps> = ({
   deleteColumn,
   updateColumnTitle,
   createTask,
+  deleteTask,
 }) => {
   const [editMode, setEditMode] = useState(false);
   const {
@@ -88,9 +91,9 @@ const ColumnItem: React.FC<ColumnItemProps> = ({
           className="stroke-gray-500 hover:stroke-white hover:bg-secondary rounded px-1 py-2 duration-300"
         />
       </div>
-      <div className="flex-grow">
+      <div className="flex flex-grow flex-col overflow-x-hidden overflow-y-auto">
         {tasks.map((task) => (
-          <p>{task.content}</p>
+          <TaskItem key={task.id} task={task} deleteTask={deleteTask} />
         ))}
       </div>
       <button
