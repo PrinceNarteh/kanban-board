@@ -4,14 +4,14 @@ import React, { useState } from "react";
 import { useAppState } from "../../hooks";
 import { PlusIcon, TrashIcon } from "../../icons";
 import { Column, Id } from "../../types";
-import TaskItem from "../TaskItem";
+import { TaskList } from "../tasks";
 
 interface ColumnItemProps {
   column: Column;
 }
 
-const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
-  const { setColumns, columns, tasks, addTask } = useAppState();
+export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
+  const { setColumns, columns, addTask } = useAppState();
   const [editMode, setEditMode] = useState(false);
   const {
     attributes,
@@ -94,13 +94,7 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
           className="stroke-gray-500 hover:stroke-white hover:bg-secondary rounded px-1 py-2 duration-300"
         />
       </div>
-      <div className="flex flex-grow flex-col overflow-x-hidden overflow-y-auto">
-        {tasks
-          .filter((task) => task.columnId === column.id)
-          .map((task) => (
-            <TaskItem key={task.id} task={task} />
-          ))}
-      </div>
+      <TaskList />
       <button
         onClick={() => addTask(column.id)}
         className="flex-center w-full hover:bg-primary p-2 border-secondary border-4 rounded-md gap-2 hover:text-teal-500 duration-300"
@@ -111,5 +105,3 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
     </div>
   );
 };
-
-export default ColumnItem;

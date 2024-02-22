@@ -1,12 +1,12 @@
-import { useAppState } from "../hooks";
-import { TrashIcon } from "../icons";
-import { Task } from "../types";
+import { useAppState } from "../../hooks";
+import { TrashIcon } from "../../icons";
+import { Task } from "../../types";
 
 interface TaskItemProps {
   task: Task;
 }
 
-const TaskItem = ({ task }: TaskItemProps) => {
+export const TaskItem = ({ task }: TaskItemProps) => {
   const { deleteTask } = useAppState();
   return (
     <div className="group relative bg-primary p-2.5 h-24 min-h-24 items-center flex text-left rounded-xl border-secondary border-4 hover:ring-2 hover:ring-inset hover:ring-teal-500 cursor-grab">
@@ -18,5 +18,3 @@ const TaskItem = ({ task }: TaskItemProps) => {
     </div>
   );
 };
-
-export default TaskItem;

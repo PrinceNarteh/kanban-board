@@ -3,7 +3,7 @@ import { PlusIcon } from "../../icons";
 
 type AddColumnBtnProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-const AddColumnBtn: React.FC<AddColumnBtnProps> = (props) => {
+export const AddColumnBtn: React.FC<AddColumnBtnProps> = (props) => {
   return (
     <button
       {...props}
@@ -14,5 +14,3 @@ const AddColumnBtn: React.FC<AddColumnBtnProps> = (props) => {
     </button>
   );
 };
-
-export default AddColumnBtn;

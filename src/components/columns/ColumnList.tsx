@@ -3,10 +3,10 @@ import {
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useMemo } from "react";
+import { ColumnItem } from ".";
 import { useAppState } from "../../hooks";
-import ColumnItem from "./ColumnItem";
 
-const ColumnList = () => {
+export const ColumnList = () => {
   const { columns } = useAppState();
   const columnsIds = useMemo(
     () => columns.map((column) => column.id),
@@ -26,5 +26,3 @@ const ColumnList = () => {
     </SortableContext>
   );
 };
-
-export default ColumnList;

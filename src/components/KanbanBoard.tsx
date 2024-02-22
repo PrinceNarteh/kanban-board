@@ -16,9 +16,7 @@ import { createPortal } from "react-dom";
 import { useAppState } from "../hooks";
 import { Column } from "../types";
 import { generateId, getPosition } from "../utils";
-import AddColumnBtn from "./columns/AddColumnBtn";
-import ColumnItem from "./columns/ColumnItem";
-import ColumnList from "./columns/ColumnList";
+import { AddColumnBtn, ColumnItem, ColumnList } from "./columns";
 
 const KanbanBoard = () => {
   const { columns, setColumns } = useAppState();
