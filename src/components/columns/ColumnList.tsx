@@ -3,7 +3,7 @@ import {
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useMemo } from "react";
-import { useAppState } from "../hooks";
+import { useAppState } from "../../hooks";
 import ColumnItem from "./ColumnItem";
 
 const ColumnList = () => {
@@ -12,6 +12,7 @@ const ColumnList = () => {
     () => columns.map((column) => column.id),
     [columns]
   );
+
   return (
     <SortableContext
       items={columnsIds}

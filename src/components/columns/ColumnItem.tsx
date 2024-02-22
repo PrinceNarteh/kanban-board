@@ -1,17 +1,17 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import React, { useState } from "react";
-import { PlusIcon, TrashIcon } from "../icons";
-import { Column } from "../types";
-import TaskItem from "./TaskItem";
-import { useAppState } from "../hooks";
+import { useAppState } from "../../hooks";
+import { PlusIcon, TrashIcon } from "../../icons";
+import { Column, Id } from "../../types";
+import TaskItem from "../TaskItem";
 
 interface ColumnItemProps {
   column: Column;
 }
 
 const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
-  const { updateColumnTitle, deleteColumn, tasks, addTask } = useAppState();
+  const { setColumns, columns, tasks, addTask } = useAppState();
   const [editMode, setEditMode] = useState(false);
   const {
     attributes,
@@ -28,6 +28,19 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
     },
     disabled: editMode,
   });
+
+  const updateTitle = (id: Id, title: string) => {
+    const newColumns = columns.map((col) => {
+      if (col.id !== id) return col;
+      return { ...col, title };
+    });
+    setColumns(newColumns);
+  };
+
+  const deleteColumn = (id: Id) => {
+    const newColumns = columns.filter((column) => column.id !== id);
+    setColumns(newColumns);
+  };
 
   const styles = {
     transition,
@@ -69,7 +82,7 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
                 setEditMode(false);
               }}
               value={column.title}
-              onChange={(e) => updateColumnTitle(column.id, e.target.value)}
+              onChange={(e) => updateTitle(column.id, e.target.value)}
               className="bg-primary border rounded outline-none px-2 focus:border-teal-500"
             />
           ) : (

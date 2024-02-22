@@ -15,14 +15,22 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useAppState } from "../hooks";
 import { Column } from "../types";
-import { getPosition } from "../utils";
-import AddColumnBtn from "./AddColumnBtn";
-import ColumnItem from "./ColumnItem";
-import ColumnList from "./ColumnList";
+import { generateId, getPosition } from "../utils";
+import AddColumnBtn from "./columns/AddColumnBtn";
+import ColumnItem from "./columns/ColumnItem";
+import ColumnList from "./columns/ColumnList";
 
 const KanbanBoard = () => {
-  const { columns, addColumn, setColumns } = useAppState();
+  const { columns, setColumns } = useAppState();
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
+
+  const addColumn = () => {
+    const newColumn: Column = {
+      id: generateId(),
+      title: `Column-${columns.length + 1}`,
+    };
+    setColumns([...columns, newColumn]);
+  };
 
   const handleDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === "Column") {
