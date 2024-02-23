@@ -1,7 +1,4 @@
-import {
-  SortableContext,
-  horizontalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { SortableContext } from "@dnd-kit/sortable";
 import { useMemo } from "react";
 import { ColumnItem } from ".";
 import { useAppState } from "../../hooks";
@@ -14,10 +11,7 @@ export const ColumnList = () => {
   );
 
   return (
-    <SortableContext
-      items={columnsIds}
-      strategy={horizontalListSortingStrategy}
-    >
+    <SortableContext items={columnsIds}>
       <div className="flex gap-4">
         {columns.map((column) => (
           <ColumnItem key={column.id} column={column} />

@@ -1,6 +1,6 @@
-import { useSortable } from "@dnd-kit/sortable";
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useAppState } from "../../hooks";
 import { PlusIcon, TrashIcon } from "../../icons";
 import { Column, Id, Task } from "../../types";
@@ -29,6 +29,8 @@ export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
     },
     disabled: editMode,
   });
+
+  const tasksIds = useMemo(() => tasks.map((task) => task.id), [tasks]);
 
   const addTask = (columnId: Id) => {
     const newTask: Task = {
@@ -107,7 +109,11 @@ export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
         />
       </div>
       <div className="flex-grow overflow-x-hidden overflow-y-auto">
-        <TaskList columnId={column.id} />
+        <SortableContext items={tasksIds}>
+          <TaskList
+            tasks={tasks.filter((task) => task.columnId === column.id)}
+          />
+        </SortableContext>
       </div>
       <button
         onClick={() => addTask(column.id)}

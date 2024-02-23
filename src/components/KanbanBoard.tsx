@@ -15,13 +15,14 @@ import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useAppState } from "../hooks";
-import { Column } from "../types";
+import { Column, Task } from "../types";
 import { generateId, getPosition } from "../utils";
 import { AddColumnBtn, ColumnItem, ColumnList } from "./columns";
 import { TaskItem } from "./tasks";
 
 const KanbanBoard = () => {
-  const { columns, tasks, setColumns, setTasks, activeTask } = useAppState();
+  const { columns, tasks, setColumns, setTasks } = useAppState();
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
   const addColumn = () => {
@@ -35,6 +36,10 @@ const KanbanBoard = () => {
   const handleDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.column);
+    }
+
+    if (event.active.data.current?.type === "Task") {
+      setActiveTask(event.active.data.current.task);
     }
   };
 
@@ -53,6 +58,7 @@ const KanbanBoard = () => {
     if (isActiveTask && isOverTask) {
       const activeIndex = getPosition(columns, activeId);
       const overIndex = getPosition(columns, overId);
+      console.log(overIndex);
       tasks[activeIndex].columnId === tasks[overIndex].columnId;
       setTasks(arrayMove(tasks, activeIndex, overIndex));
     }
