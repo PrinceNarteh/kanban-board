@@ -94,7 +94,9 @@ export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
           className="stroke-gray-500 hover:stroke-white hover:bg-secondary rounded px-1 py-2 duration-300"
         />
       </div>
-      <TaskList />
+      <div className="flex-grow overflow-x-hidden overflow-y-auto">
+        <TaskList />
+      </div>
       <button
         onClick={() => addTask(column.id)}
         className="flex-center w-full hover:bg-primary p-2 border-secondary border-4 rounded-md gap-2 hover:text-teal-500 duration-300"

@@ -9,6 +9,7 @@ type AppStore = {
 
   // Task
   tasks: Task[];
+  setTasks: (tasks: Task[]) => void;
   addTask: (columnId: Id) => void;
   deleteTask: (id: Id) => void;
 };
@@ -19,7 +20,9 @@ export const useAppStore = create<AppStore>((set) => ({
   setColumns: (columns: Column[]) => {
     set(() => ({ columns }));
   },
-
+  setTasks: (tasks: Task[]) => {
+    set(() => ({ tasks }));
+  },
   addTask: (columnId: Id) => {
     set((state) => {
       const newTask: Task = {
