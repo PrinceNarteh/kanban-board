@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useAppState } from "../../hooks";
 import { TrashIcon } from "../../icons";
 import { Id, Task } from "../../types";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface TaskItemProps {
   task: Task;
@@ -10,6 +12,19 @@ interface TaskItemProps {
 export const TaskItem = ({ task }: TaskItemProps) => {
   const { tasks, setTasks } = useAppState();
   const [editMode, setEditMode] = useState(false);
+  const { setNodeRef, listeners, attributes, transform, transition } =
+    useSortable({
+      id: task.id,
+      data: {
+        type: "Task",
+        task,
+      },
+    });
+
+  const styles = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
 
   const editTask = (id: Id, content: string) => {
     const newTask = tasks.map((taskItem) => {
@@ -29,6 +44,10 @@ export const TaskItem = ({ task }: TaskItemProps) => {
 
   return (
     <div
+      {...attributes}
+      {...listeners}
+      style={styles}
+      ref={setNodeRef}
       onClick={() => setEditMode(true)}
       className="group relative bg-primary p-2.5 h-24 min-h-24 items-center flex text-left rounded-xl border-secondary border-4 hover:ring-2 hover:ring-inset hover:ring-teal-500 cursor-grab"
     >
