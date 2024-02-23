@@ -12,14 +12,20 @@ interface TaskItemProps {
 export const TaskItem = ({ task }: TaskItemProps) => {
   const { tasks, setTasks } = useAppState();
   const [editMode, setEditMode] = useState(false);
-  const { setNodeRef, listeners, attributes, transform, transition } =
-    useSortable({
-      id: task.id,
-      data: {
-        type: "Task",
-        task,
-      },
-    });
+  const {
+    setNodeRef,
+    listeners,
+    attributes,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: task.id,
+    data: {
+      type: "Task",
+      task,
+    },
+  });
 
   const styles = {
     transition,
@@ -41,6 +47,16 @@ export const TaskItem = ({ task }: TaskItemProps) => {
     const newTasks = tasks.filter((task) => task.id !== id);
     setTasks(newTasks);
   };
+
+  if (isDragging) {
+    return (
+      <div
+        style={styles}
+        ref={setNodeRef}
+        className="group relative bg-primary/50 p-2.5 h-24 min-h-24 items-center flex text-left rounded-xl border-secondary border-2 border-teal-500/50"
+      ></div>
+    );
+  }
 
   return (
     <div
