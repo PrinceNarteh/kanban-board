@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { Column, Id, Task } from "./types";
-import { generateId } from "./utils";
+import { Column, Task } from "./types";
 
 type AppStore = {
   // Column
@@ -10,8 +9,6 @@ type AppStore = {
   // Task
   tasks: Task[];
   setTasks: (tasks: Task[]) => void;
-  addTask: (columnId: Id) => void;
-  deleteTask: (id: Id) => void;
 };
 
 export const useAppStore = create<AppStore>((set) => ({
@@ -22,28 +19,5 @@ export const useAppStore = create<AppStore>((set) => ({
   },
   setTasks: (tasks: Task[]) => {
     set(() => ({ tasks }));
-  },
-  addTask: (columnId: Id) => {
-    set((state) => {
-      const newTask: Task = {
-        columnId,
-        id: generateId(),
-        content: `Task ${
-          state.tasks.filter((task) => task.columnId === columnId).length + 1
-        }`,
-      };
-
-      return {
-        tasks: [...state.tasks, newTask],
-      };
-    });
-  },
-  deleteTask: (id: Id) => {
-    set((state) => {
-      const newTasks = state.tasks.filter((task) => task.id !== id);
-      return {
-        tasks: newTasks,
-      };
-    });
   },
 }));

@@ -8,7 +8,7 @@ interface TaskItemProps {
 }
 
 export const TaskItem = ({ task }: TaskItemProps) => {
-  const { tasks, deleteTask, setTasks } = useAppState();
+  const { tasks, setTasks } = useAppState();
   const [editMode, setEditMode] = useState(false);
 
   const editTask = (id: Id, content: string) => {
@@ -20,6 +20,11 @@ export const TaskItem = ({ task }: TaskItemProps) => {
       };
     });
     setTasks(newTask);
+  };
+
+  const deleteTask = (id: Id) => {
+    const newTasks = tasks.filter((task) => task.id !== id);
+    setTasks(newTasks);
   };
 
   return (

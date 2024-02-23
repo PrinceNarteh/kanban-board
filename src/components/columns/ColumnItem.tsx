@@ -3,7 +3,8 @@ import { CSS } from "@dnd-kit/utilities";
 import React, { useState } from "react";
 import { useAppState } from "../../hooks";
 import { PlusIcon, TrashIcon } from "../../icons";
-import { Column, Id } from "../../types";
+import { Column, Id, Task } from "../../types";
+import { generateId } from "../../utils";
 import { TaskList } from "../tasks";
 
 interface ColumnItemProps {
@@ -11,7 +12,7 @@ interface ColumnItemProps {
 }
 
 export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
-  const { setColumns, columns, addTask } = useAppState();
+  const { setColumns, columns, tasks, setTasks } = useAppState();
   const [editMode, setEditMode] = useState(false);
   const {
     attributes,
@@ -28,6 +29,17 @@ export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
     },
     disabled: editMode,
   });
+
+  const addTask = (columnId: Id) => {
+    const newTask: Task = {
+      columnId,
+      id: generateId(),
+      content: `Task ${
+        tasks.filter((task) => task.columnId === columnId).length + 1
+      }`,
+    };
+    setTasks([...tasks, newTask]);
+  };
 
   const updateTitle = (id: Id, title: string) => {
     const newColumns = columns.map((col) => {
