@@ -1,28 +1,21 @@
 import {
   DndContext,
   DragEndEvent,
-  DragOverlay,
   DragStartEvent,
   PointerSensor,
   closestCenter,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { useMemo, useState } from "react";
-import { createPortal } from "react-dom";
+import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+import { useMemo } from "react";
 import { TaskItem } from ".";
 import { useAppState } from "../../hooks";
-import { Task } from "../../types";
+import { Id } from "../../types";
 import { getPosition } from "../../utils";
 
-export const TaskList = () => {
-  const { tasks, setTasks } = useAppState();
-  const [activeTask, setActiveTask] = useState<Task | null>(null);
+export const TaskList = ({ columnId }: { columnId: Id }) => {
+  const { tasks, setTasks, setActiveTask } = useAppState();
   const tasksIds = useMemo(() => tasks.map((task) => task.id), [tasks]);
 
   const handleDragStart = (evt: DragStartEvent) => {
@@ -38,7 +31,6 @@ export const TaskList = () => {
     const newPosition = getPosition(tasks, over?.id);
     const newArray = arrayMove(tasks, currentPosition, newPosition);
     setTasks(newArray);
-    setActiveTask(null);
   };
 
   const sensors = useSensors(
@@ -56,18 +48,14 @@ export const TaskList = () => {
       onDragEnd={handleDragEnd}
       collisionDetection={closestCenter}
     >
-      <SortableContext items={tasksIds} strategy={verticalListSortingStrategy}>
+      <SortableContext items={tasksIds}>
         <div className="flex flex-col">
-          {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} />
-          ))}
+          {tasks
+            .filter((task) => task.columnId === columnId)
+            .map((task) => (
+              <TaskItem key={task.id} task={task} />
+            ))}
         </div>
-        {createPortal(
-          <DragOverlay>
-            {activeTask ? <TaskItem task={activeTask} /> : null}
-          </DragOverlay>,
-          document.body
-        )}
       </SortableContext>
     </DndContext>
   );

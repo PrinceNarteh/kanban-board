@@ -107,7 +107,7 @@ export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
         />
       </div>
       <div className="flex-grow overflow-x-hidden overflow-y-auto">
-        <TaskList />
+        <TaskList columnId={column.id} />
       </div>
       <button
         onClick={() => addTask(column.id)}

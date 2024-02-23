@@ -9,15 +9,21 @@ type AppStore = {
   // Task
   tasks: Task[];
   setTasks: (tasks: Task[]) => void;
+  activeTask: Task | null;
+  setActiveTask: (task: Task) => void;
 };
 
 export const useAppStore = create<AppStore>((set) => ({
   columns: [],
   tasks: [],
-  setColumns: (columns: Column[]) => {
+  activeTask: null,
+  setColumns(columns: Column[]) {
     set(() => ({ columns }));
   },
-  setTasks: (tasks: Task[]) => {
+  setTasks(tasks: Task[]) {
     set(() => ({ tasks }));
+  },
+  setActiveTask(task: Task | null) {
+    set(() => ({ activeTask: task }));
   },
 }));

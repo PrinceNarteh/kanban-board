@@ -1,6 +1,7 @@
 import {
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   KeyboardSensor,
@@ -17,9 +18,10 @@ import { useAppState } from "../hooks";
 import { Column } from "../types";
 import { generateId, getPosition } from "../utils";
 import { AddColumnBtn, ColumnItem, ColumnList } from "./columns";
+import { TaskItem } from "./tasks";
 
 const KanbanBoard = () => {
-  const { columns, setColumns } = useAppState();
+  const { columns, tasks, setColumns, setTasks, activeTask } = useAppState();
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
   const addColumn = () => {
@@ -36,17 +38,40 @@ const KanbanBoard = () => {
     }
   };
 
+  const handleDragover = (evt: DragOverEvent) => {
+    const { active, over } = evt;
+    const activeId = active.id;
+    const overId = over?.id;
+
+    if (!overId || activeId === overId) return;
+
+    const isActiveTask = active.data.current?.type === "Task";
+    const isOverTask = over.data.current?.type === "Task";
+
+    if (!isActiveTask) return;
+
+    if (isActiveTask && isOverTask) {
+      const activeIndex = getPosition(columns, activeId);
+      const overIndex = getPosition(columns, overId);
+      tasks[activeIndex].columnId === tasks[overIndex].columnId;
+      setTasks(arrayMove(tasks, activeIndex, overIndex));
+    }
+
+    const isOverColumn = over.data.current?.type === "Column";
+    console.log(isOverColumn);
+    if (isActiveTask && isOverColumn) {
+      const activeIndex = getPosition(tasks, activeId);
+      tasks[activeIndex].columnId === overId;
+      setTasks(arrayMove(tasks, activeIndex, activeIndex));
+    }
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (active.id === over?.id) return;
-
     const currentPosition = getPosition(columns, active.id);
     const newPosition = getPosition(columns, over?.id);
-
-    const newColumns = arrayMove(columns, currentPosition, newPosition);
-
-    setColumns(newColumns);
-    setActiveColumn(null);
+    setColumns(arrayMove(columns, currentPosition, newPosition));
   };
 
   const sensors = useSensors(
@@ -69,12 +94,14 @@ const KanbanBoard = () => {
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
+          onDragOver={handleDragover}
         >
           <ColumnList />
           <AddColumnBtn onClick={addColumn} />
           {createPortal(
             <DragOverlay>
-              {activeColumn ? <ColumnItem column={activeColumn} /> : null}
+              {activeColumn && <ColumnItem column={activeColumn} />}
+              {activeTask && <TaskItem task={activeTask} />}
             </DragOverlay>,
             document.body
           )}
