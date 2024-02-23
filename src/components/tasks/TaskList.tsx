@@ -1,12 +1,4 @@
 import {
-  SortableContext,
-  arrayMove,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { TaskItem } from ".";
-import { useAppState } from "../../hooks";
-import { useMemo, useState } from "react";
-import {
   DndContext,
   DragEndEvent,
   DragOverlay,
@@ -16,9 +8,17 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { getPosition } from "../../utils";
-import { Task } from "../../types";
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
+import { TaskItem } from ".";
+import { useAppState } from "../../hooks";
+import { Task } from "../../types";
+import { getPosition } from "../../utils";
 
 export const TaskList = () => {
   const { tasks, setTasks } = useAppState();
@@ -38,6 +38,7 @@ export const TaskList = () => {
     const newPosition = getPosition(tasks, over?.id);
     const newArray = arrayMove(tasks, currentPosition, newPosition);
     setTasks(newArray);
+    setActiveTask(null);
   };
 
   const sensors = useSensors(

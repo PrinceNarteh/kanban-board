@@ -46,6 +46,7 @@ const KanbanBoard = () => {
     const newColumns = arrayMove(columns, currentPosition, newPosition);
 
     setColumns(newColumns);
+    setActiveColumn(null);
   };
 
   const sensors = useSensors(
