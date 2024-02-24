@@ -45,10 +45,12 @@ const KanbanBoard = () => {
 
   const handleDragover = (evt: DragOverEvent) => {
     const { active, over } = evt;
+    if (!over) return;
+
     const activeId = active.id;
     const overId = over?.id;
 
-    if (!overId || activeId === overId) return;
+    if (activeId === overId) return;
 
     const isActiveTask = active.data.current?.type === "Task";
     const isOverTask = over.data.current?.type === "Task";
@@ -56,15 +58,13 @@ const KanbanBoard = () => {
     if (!isActiveTask) return;
 
     if (isActiveTask && isOverTask) {
-      const activeIndex = getPosition(columns, activeId);
-      const overIndex = getPosition(columns, overId);
-      console.log(overIndex);
+      const activeIndex = getPosition(tasks, activeId);
+      const overIndex = getPosition(tasks, overId);
       tasks[activeIndex].columnId === tasks[overIndex].columnId;
       setTasks(arrayMove(tasks, activeIndex, overIndex));
     }
 
     const isOverColumn = over.data.current?.type === "Column";
-    console.log(isOverColumn);
     if (isActiveTask && isOverColumn) {
       const activeIndex = getPosition(tasks, activeId);
       tasks[activeIndex].columnId === overId;
