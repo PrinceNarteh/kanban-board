@@ -54,6 +54,9 @@ export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
   const deleteColumn = (id: Id) => {
     const newColumns = columns.filter((column) => column.id !== id);
     setColumns(newColumns);
+
+    const newTasks = tasks.filter((task) => task.columnId !== id);
+    setTasks(newTasks);
   };
 
   const styles = {

@@ -45,17 +45,13 @@ const KanbanBoard = () => {
 
   const handleDragover = (evt: DragOverEvent) => {
     const { active, over } = evt;
-    if (!over) return;
-
     const activeId = active.id;
     const overId = over?.id;
 
-    if (activeId === overId) return;
-
     const isActiveTask = active.data.current?.type === "Task";
-    const isOverTask = over.data.current?.type === "Task";
+    const isOverTask = over?.data.current?.type === "Task";
 
-    if (!isActiveTask) return;
+    if (!overId || !isActiveTask || activeId === overId) return;
 
     if (isActiveTask && isOverTask) {
       const activeIndex = getPosition(tasks, activeId);
