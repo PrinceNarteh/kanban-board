@@ -3,7 +3,7 @@ import { Task } from "../../types";
 
 export const TaskList = ({ tasks }: { tasks: Task[] }) => {
   return (
-    <div className="flex flex-col">
+    <div className="">
       {tasks.map((task) => (
         <TaskItem key={task.id} task={task} />
       ))}

@@ -31,6 +31,7 @@ export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
   });
 
   const tasksIds = useMemo(() => tasks.map((task) => task.id), [tasks]);
+  const columnTasks = tasks.filter((task) => task.columnId === column.id);
 
   const addTask = (columnId: Id) => {
     const newTask: Task = {
@@ -88,7 +89,7 @@ export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
       >
         <div className="flex gap-2">
           <div className="flex-center bg-secondary px-2 py-1 text-sm rounded-full">
-            0
+            {columnTasks.length}
           </div>
           {editMode ? (
             <input
@@ -111,13 +112,11 @@ export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
           className="stroke-gray-500 hover:stroke-white hover:bg-secondary rounded px-1 py-2 duration-300"
         />
       </div>
-      <div className="flex-grow overflow-x-hidden overflow-y-auto">
-        <SortableContext items={tasksIds}>
-          <TaskList
-            tasks={tasks.filter((task) => task.columnId === column.id)}
-          />
-        </SortableContext>
-      </div>
+      <SortableContext items={tasksIds}>
+        <div className="flex-grow overflow-x-hidden overflow-y-auto flex flex-col">
+          <TaskList tasks={columnTasks} />
+        </div>
+      </SortableContext>
       <button
         onClick={() => addTask(column.id)}
         className="flex-center w-full hover:bg-primary p-2 border-secondary border-4 rounded-md gap-2 hover:text-teal-500 duration-300"

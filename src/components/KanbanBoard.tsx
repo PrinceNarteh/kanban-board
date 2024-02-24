@@ -69,6 +69,9 @@ const KanbanBoard = () => {
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
+    setActiveColumn(null);
+    setActiveTask(null);
+
     const { active, over } = event;
     if (active.id === over?.id) return;
     const currentPosition = getPosition(columns, active.id);
