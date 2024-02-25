@@ -112,11 +112,11 @@ export const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
           className="stroke-gray-500 hover:stroke-white hover:bg-secondary rounded px-1 py-2 duration-300"
         />
       </div>
-      <SortableContext items={tasksIds}>
-        <div className="flex-grow overflow-x-hidden overflow-y-auto flex flex-col">
+      <div className="flex-grow overflow-x-hidden overflow-y-auto flex flex-col">
+        <SortableContext items={tasksIds}>
           <TaskList tasks={columnTasks} />
-        </div>
-      </SortableContext>
+        </SortableContext>
+      </div>
       <button
         onClick={() => addTask(column.id)}
         className="flex-center w-full hover:bg-primary p-2 border-secondary border-4 rounded-md gap-2 hover:text-teal-500 duration-300"

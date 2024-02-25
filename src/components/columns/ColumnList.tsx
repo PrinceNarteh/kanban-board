@@ -1,14 +1,24 @@
 import { SortableContext } from "@dnd-kit/sortable";
 import { useMemo } from "react";
-import { ColumnItem } from ".";
+import { AddColumnBtn, ColumnItem } from ".";
 import { useAppState } from "../../hooks";
+import { generateId } from "../../utils";
+import { Column } from "../../types";
 
 export const ColumnList = () => {
-  const { columns } = useAppState();
+  const { columns, setColumns } = useAppState();
   const columnsIds = useMemo(
     () => columns.map((column) => column.id),
     [columns]
   );
+
+  const addColumn = () => {
+    const newColumn: Column = {
+      id: generateId(),
+      title: `Column-${columns.length + 1}`,
+    };
+    setColumns([...columns, newColumn]);
+  };
 
   return (
     <SortableContext items={columnsIds}>
@@ -16,6 +26,7 @@ export const ColumnList = () => {
         {columns.map((column) => (
           <ColumnItem key={column.id} column={column} />
         ))}
+        <AddColumnBtn onClick={addColumn} />
       </div>
     </SortableContext>
   );

@@ -16,22 +16,14 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useAppState } from "../hooks";
 import { Column, Task } from "../types";
-import { generateId, getPosition } from "../utils";
-import { AddColumnBtn, ColumnItem, ColumnList } from "./columns";
+import { getPosition } from "../utils";
+import { ColumnItem, ColumnList } from "./columns";
 import { TaskItem } from "./tasks";
 
 const KanbanBoard = () => {
   const { columns, tasks, setColumns, setTasks } = useAppState();
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
-
-  const addColumn = () => {
-    const newColumn: Column = {
-      id: generateId(),
-      title: `Column-${columns.length + 1}`,
-    };
-    setColumns([...columns, newColumn]);
-  };
 
   const handleDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === "Column") {
@@ -56,7 +48,11 @@ const KanbanBoard = () => {
     if (isActiveTask && isOverTask) {
       const activeIndex = getPosition(tasks, activeId);
       const overIndex = getPosition(tasks, overId);
-      tasks[activeIndex].columnId === tasks[overIndex].columnId;
+      if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
+        tasks[activeIndex].columnId === tasks[overIndex].columnId;
+        setTasks(arrayMove(tasks, activeIndex, overIndex - 1));
+        return;
+      }
       setTasks(arrayMove(tasks, activeIndex, overIndex));
     }
 
@@ -92,7 +88,7 @@ const KanbanBoard = () => {
   );
 
   return (
-    <div className="m-auto flex w-full min-h-screen items-center overflow-x-auto px-10">
+    <div className="m-auto flex w-full min-h-screen items-center overflow-x-auto px-10 overflow-y-hidden">
       <div className="mx-auto flex gap-4 items-center">
         <DndContext
           sensors={sensors}
@@ -101,8 +97,9 @@ const KanbanBoard = () => {
           onDragEnd={handleDragEnd}
           onDragOver={handleDragover}
         >
-          <ColumnList />
-          <AddColumnBtn onClick={addColumn} />
+          <div className="m-auto flex gap-4">
+            <ColumnList />
+          </div>
           {createPortal(
             <DragOverlay>
               {activeColumn && <ColumnItem column={activeColumn} />}
